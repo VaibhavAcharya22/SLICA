@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "846035544248",
+    "project_id": "slica-7159d",
+    "storage_bucket": "slica-7159d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846035544248:android:e759dd3b679a3fe992ec4d",
+        "android_client_info": {
+          "package_name": "com.example.slica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846035544248-it8t35pga5ckrl5k9ng8h9uu77el6u8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY6CGs38uBE6Uqk3ZNTmsnvQZR_zlwiBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846035544248-it8t35pga5ckrl5k9ng8h9uu77el6u8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
