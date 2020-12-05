@@ -12,10 +12,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  SharedPreferences logindata;
+  String uname;
+
   @override
   void initState(){
     super.initState();
+    initial();
   }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      uname = logindata.getString('uname');
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () async {
+          logindata.setBool('login', true);
+
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
           try{
             // Navigator.of(context).pop();
-            Navigator.of(context).pushNamedAndRemoveUntil('/a', (Route<dynamic> route) => false);
+            // Navigator.of(context).pushNamedAndRemoveUntil('/a', (Route<dynamic> route) => false);
             // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
             // Navigator.of(context).popUntil(ModalRoute.withName('/a'));
           }catch(e){

@@ -5,7 +5,6 @@ import 'package:slica/home_screen.dart';
 import 'constants.dart';
 import "package:shared_preferences/shared_preferences.dart";
 
-
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 final emailController = TextEditingController();
@@ -22,16 +21,28 @@ class _LoginScreenState extends State<LoginScreen> {
   bool alreadyLogin = false;
   bool _passwordVisible = false;
   bool visible = true;
+  SharedPreferences logindata;
+  bool newuser;
 
   @override
   void initState() {
     _passwordVisible = false;
     super.initState();
+    login_or_not();
   }
 
+  void login_or_not() async {
+    logindata = await SharedPreferences.getInstance();
+    newuser = (logindata.getBool('login') ?? true);
+
+    print(newuser);
+    if (newuser == false) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    }
+  }
 
   @override
-
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,13 +74,11 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Enter your roll number',
               hintStyle: kHintTextStyle,
             ),
-
           ),
         ),
       ],
     );
   }
-
 
   Widget _buildPasswordTF() {
     return Column(
@@ -84,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child:TextFormField(
+          child: TextFormField(
             controller: passController,
             obscureText: !_passwordVisible,
             style: TextStyle(
@@ -121,7 +130,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-
   Widget _buildShowPassCheckbox() {
     return Container(
       height: 20.0,
@@ -148,7 +156,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 
   // Widget _buildRememberMeCheckbox() {
   //   return Container(
@@ -184,24 +191,33 @@ class _LoginScreenState extends State<LoginScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () async {
-          try{
-              User user = (await FirebaseAuth.instance
-                  .signInWithEmailAndPassword(
-                  email: emailController.text + "@gmail.com", password: "SLICA123"))
-                  .user;
+          String uname = emailController.text + "@gmail.com";
+          String pass = "SLICA123";
 
-              if (user != null) {
-                emailController.text = "";
-                passController.text = "";
-                Navigator.of(context).popAndPushNamed('/b');
+          try {
+            if (uname != '' && pass != '') {
+              print('successful');
+              logindata.setBool('login', false);
 
-              }
+              logindata.setString('uname', uname);
 
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()));
+            }
+            User user = (await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: emailController.text + "@gmail.com",
+                    password: "SLICA123"))
+                .user;
 
-          }catch(e){
+            if (user != null) {
+              emailController.text = "";
+              passController.text = "";
+              Navigator.of(context).popAndPushNamed('/b');
+            }
+          } catch (e) {
             print(e);
             emailController.text = "";
-            passController.text ="";
+            passController.text = "";
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -222,7 +238,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +276,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     horizontal: 40.0,
                     vertical: 120.0,
                   ),
-                  children: <Widget> [
+                  children: <Widget>[
                     Image(image: AssetImage("assets/images/SLICA.jpeg")),
                     SizedBox(height: 30.0),
                     _buildEmailTF(),
@@ -283,4 +298,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
