@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slica/home_screen.dart';
-import 'constants.dart';
+import 'utilities/constants.dart';
 import "package:shared_preferences/shared_preferences.dart";
+import 'utilities/dialog.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-
-final emailController = TextEditingController();
-final passController = TextEditingController();
-final ScrollController _scrollController = ScrollController();
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,12 +13,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // bool _rememberMe = false;
-  bool alreadyLogin = false;
-  bool _passwordVisible = false;
-  bool visible = true;
-  SharedPreferences logindata;
-  bool newuser;
+  // bool _rememberMe = false;  <== This Field For later use
+
+  bool _emailValidate = false; // email field Check empty or not
+  bool _passwordValidate = false; // password field check empty or not
+  bool _passwordVisible = false; // Show masked password when login
+
+  SharedPreferences logindata; //SharedPreferences Object in which all details of login can stored
+  bool newuser; // Checks where user is new or not
 
   @override
   void initState() {
@@ -30,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     login_or_not();
   }
+
+// --------- Function For checking user is already logged in or not ------------
 
   void login_or_not() async {
     logindata = await SharedPreferences.getInstance();
@@ -43,6 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+
+// ------------------ This Function For Email TextField Design ----------------
+
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,9 +79,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+
       ],
     );
   }
+//-------------------------------------------------------------------------
+
+
+// -------------- This Function For Password TextField Design --------------
 
   Widget _buildPasswordTF() {
     return Column(
@@ -115,13 +123,17 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
+//------------------------------------------------------------------------------
+
+
+// ------------- This Function For Forgot Password Field Design ----------------
 
   Widget _buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
         onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 0.0),
+        padding: EdgeInsets.only(right: 0.0)  ,
         child: Text(
           'Forgot Password?',
           style: kLabelStyle,
@@ -129,6 +141,10 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+//------------------------------------------------------------------------------
+
+
+// --------------- This Function For Show Password Field Design ----------------
 
   Widget _buildShowPassCheckbox() {
     return Container(
@@ -139,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
             data: ThemeData(unselectedWidgetColor: Colors.white),
             child: Checkbox(
               value: _passwordVisible,
-              checkColor: Colors.green,
+              checkColor: Colors.blueAccent,
               activeColor: Colors.white,
               onChanged: (value) {
                 setState(() {
@@ -156,6 +172,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+//------------------------------------------------------------------------------
+
+// ---------------- This Function For Remember ME Field Design -----------------
 
   // Widget _buildRememberMeCheckbox() {
   //   return Container(
@@ -183,6 +202,10 @@ class _LoginScreenState extends State<LoginScreen> {
   //     ),
   //   );
   // }
+//------------------------------------------------------------------------------
+
+
+// ------------------- This Function For Login Button Design -------------------
 
   Widget _buildLoginBtn() {
     return Container(
@@ -191,11 +214,30 @@ class _LoginScreenState extends State<LoginScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () async {
-          String uname = emailController.text + "@gmail.com";
-          String pass = "SLICA123";
+          setState(() {
+            // Here We checking Whether User entered Empty String Or not
 
+            emailController.text.isEmpty ? _emailValidate = true : _emailValidate = false;
+            passController.text.isEmpty ? _passwordValidate = true : _passwordValidate = false;
+            if(_emailValidate == true  || _passwordValidate == true)
+              {
+                showSingleBtnAlertDialog(context,'Empy Field',"Roll no or password not be empty.");
+              }
+          });
+           //--------- Here That Cheking ends------------------
+
+          //  Authentication Of User And Shared Preferences
+
+          String uname,pass;
           try {
+            User user = (await FirebaseAuth.instance.signInWithEmailAndPassword(
+                email: emailController.text + "@gmail.com",
+                password: "SLICA123"))
+                .user;
+
             if (uname != '' && pass != '') {
+               uname = emailController.text + "@gmail.com";
+               pass = "SLICA123";
               print('successful');
               logindata.setBool('login', false);
 
@@ -204,10 +246,8 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => HomeScreen()));
             }
-            User user = (await FirebaseAuth.instance.signInWithEmailAndPassword(
-                    email: emailController.text + "@gmail.com",
-                    password: "SLICA123"))
-                .user;
+
+            // Checking user entered fields are null or not
 
             if (user != null) {
               emailController.text = "";
@@ -218,6 +258,7 @@ class _LoginScreenState extends State<LoginScreen> {
             print(e);
             emailController.text = "";
             passController.text = "";
+            showSingleBtnAlertDialog(context,'Invalid Roll No or Password',"Roll no or password not match");
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -238,6 +279,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+//------------------------------------------------------------------------------
+
+// ------ This Is Build method From Where All Other Functions Called -----------
 
   @override
   Widget build(BuildContext context) {
@@ -269,25 +313,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: double.infinity,
                 child: ListView(
                   // reverse: true,
-                  controller: _scrollController,
+                  controller: scrollController,
                   // physics: NeverScrollableScrollPhysics(),
                   physics: RangeMaintainingScrollPhysics(),
                   padding: EdgeInsets.symmetric(
                     horizontal: 40.0,
-                    vertical: 120.0,
+                    vertical: 100.0,
                   ),
                   children: <Widget>[
-                    Image(image: AssetImage("assets/images/SLICA.jpeg")),
+                    Image(image: AssetImage("assets/images/SLICA.jpeg")),//logo of SLICA
                     SizedBox(height: 30.0),
-                    _buildEmailTF(),
+                    _buildEmailTF(), // Calling Email Function
                     SizedBox(
                       height: 30.0,
                     ),
-                    _buildPasswordTF(),
-                    _buildForgotPasswordBtn(),
-                    _buildShowPassCheckbox(),
+                    _buildPasswordTF(), // Calling Password Function
+                    _buildForgotPasswordBtn(), // Calling Forgot Password Function
+                    _buildShowPassCheckbox(), // Calling Show Password Function
                     // _buildRememberMeCheckbox(),
-                    _buildLoginBtn(),
+                    _buildLoginBtn(), // Calling Login Button Function
                   ],
                 ),
               ),
@@ -297,4 +341,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
 }
+//-------------------------------------------------------------------------------

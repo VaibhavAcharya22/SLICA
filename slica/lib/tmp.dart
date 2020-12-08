@@ -1,277 +1,181 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:slica/home_screen.dart';
-import 'constants.dart';
-import "package:shared_preferences/shared_preferences.dart";
 
-
-final FirebaseAuth _auth = FirebaseAuth.instance;
-
-final emailController = TextEditingController();
-final passController = TextEditingController();
-final ScrollController _scrollController = ScrollController();
-
-class TmpScreen extends StatefulWidget {
+class TableWidget extends StatefulWidget {
   @override
-  _TmpScreenState createState() => _TmpScreenState();
+  _TableWidgetState createState() => _TableWidgetState();
 }
 
-class _TmpScreenState extends State<TmpScreen> {
-  // bool _rememberMe = false;
-  bool _passwordVisible = false;
-
-  @override
-  void initState() {
-    _passwordVisible = false;
-    super.initState();
-  }
-
-
-  @override
-
-  Widget _buildEmailTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Roll No',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextFormField(
-            // textInputAction: TextInputAction.next,
-            controller: emailController,
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.person,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your roll number',
-              hintStyle: kHintTextStyle,
-            ),
-
-          ),
-        ),
-      ],
-    );
-  }
-
-
-  Widget _buildPasswordTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Password',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child:TextFormField(
-            controller: passController,
-            obscureText: !_passwordVisible,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Password',
-              hintStyle: kHintTextStyle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildForgotPasswordBtn() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 0.0),
-        child: Text(
-          'Forgot Password?',
-          style: kLabelStyle,
-        ),
-      ),
-    );
-  }
-
-
-  Widget _buildShowPassCheckbox() {
-    return Container(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: _passwordVisible,
-              checkColor: Colors.green,
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  _passwordVisible = !_passwordVisible;
-                });
-              },
-            ),
-          ),
-          Text(
-            'Show Password',
-            style: kLabelStyle,
-          ),
-        ],
-      ),
-    );
-  }
-
-
-  // Widget _buildRememberMeCheckbox() {
-  //   return Container(
-  //     height: 20.0,
-  //     child: Row(
-  //       children: <Widget>[
-  //         Theme(
-  //           data: ThemeData(unselectedWidgetColor: Colors.white),
-  //           child: Checkbox(
-  //             value: _rememberMe,
-  //             checkColor: Colors.green,
-  //             activeColor: Colors.white,
-  //             onChanged: (value) {
-  //               setState(() {
-  //                 _rememberMe = value;
-  //               });
-  //             },
-  //           ),
-  //         ),
-  //         Text(
-  //           'Remember me',
-  //           style: kLabelStyle,
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _buildLoginBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () async {
-          try{
-            User user = (await  FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password:passController.text)).user;
-            if( user != null){
-              emailController.text="";
-              passController.text = "";
-              Navigator.of(context).pushNamed("/b");
-            }
-          }catch(e){
-            print(e);
-            emailController.text = "";
-            passController.text ="";
-          }
-        },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'LOGIN',
-          style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
-  }
-
+class _TableWidgetState extends State<TableWidget> {
+  bool _isBorderEnabled = false;
+  var _actionIcon = Icons.border_all;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.9],
+      appBar: AppBar(
+        centerTitle: true,
+        title: Container(
+          child: Text(
+            'Table Widget',
+            style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(_actionIcon),
+            onPressed: () => setState(() {
+              _isBorderEnabled == false
+                  ? _isBorderEnabled = true
+                  : _isBorderEnabled = false;
+
+              _isBorderEnabled
+                  ? _actionIcon = Icons.border_clear
+                  : _actionIcon = Icons.border_all;
+            }),
+          ),
+          IconButton(
+            icon: Icon(Icons.code),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+//                builder: (context) => CodeScreen(code: Code.tableCode),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 12),
+        child: Table(
+          border: _isBorderEnabled ? TableBorder.all() : null,
+          defaultVerticalAlignment: TableCellVerticalAlignment.top,
+          children: <TableRow>[
+            ///First table row with 3 children
+            TableRow(children: <Widget>[
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  color: Colors.red,
+                  width: 50.0,
+                  height: 50.0,
+                  child: Center(
+                    child: Text(
+                      "Row 1  Element 1",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 6.0,
+                          ),
+                    ),
                   ),
                 ),
               ),
-              Container(
-                height: double.infinity,
-                  child: ListView(
-                    // reverse: true,
-                    controller: _scrollController,
-                    // physics: NeverScrollableScrollPhysics(),
-                    physics: RangeMaintainingScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 40.0,
-                      vertical: 120.0,
-                    ),
-                    children: <Widget> [
-                      Image(image: AssetImage("assets/images/SLICA.jpeg")),
-                          SizedBox(height: 30.0),
-                          _buildEmailTF(),
-                          SizedBox(
-                            height: 30.0,
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  color: Colors.orange,
+                  width: 50.0,
+                  height: 50.0,
+                  child: Center(
+                    child: Text(
+                      "Row 1  Element 2",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 6.0,
                           ),
-                          _buildPasswordTF(),
-                          _buildForgotPasswordBtn(),
-                          _buildShowPassCheckbox(),
-                          // _buildRememberMeCheckbox(),
-                          _buildLoginBtn(),
-                    ],
+                    ),
                   ),
                 ),
-            ],
-          ),
+              ),
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  color: Colors.blue,
+                  width: 50.0,
+                  height: 50.0,
+                  child: Center(
+                    child: Text(
+                      "Row 1  Element 3",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 6.0,
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            ///Second table row with 3 children
+            TableRow(children: <Widget>[
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  color: Colors.lightBlue,
+                  width: 50.0,
+                  height: 48.0,
+                  child: Center(
+                    child: Text(
+                      "Row 2  Element 1",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 6.0,
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  color: Colors.green,
+                  width: 48.0,
+                  height: 48.0,
+                  child: Center(
+                    child: Text(
+                      "Row 2  Element 2",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 6.0,
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  color: Colors.blue,
+                  width: 50.0,
+                  height: 50.0,
+                  child: Center(
+                    child: Text(
+                      "Row 2  Element 3",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 6.0,
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          ],
         ),
       ),
     );
   }
 }
-

@@ -3,12 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:slica/home_screen.dart';
 import 'package:slica/login.dart';
 import "package:firebase_core/firebase_core.dart";
-import 'package:slica/tmp.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slica/faculties.dart';
+import 'faculties.dart';
+import 'tmp2.dart';
+
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  Firebase.initializeApp(); // Necessary to Initialize Firebase Before do anything
+
+  //Rotation Off in app
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) => runApp(MyApp()),
@@ -21,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SLICA',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
 
@@ -30,9 +34,10 @@ class MyApp extends StatelessWidget {
       ),
       home:  LoginScreen(),
       routes: <String, WidgetBuilder> {
-        '/a': (BuildContext context) => LoginScreen(),
-        '/b': (BuildContext context) => HomeScreen(),
-        '/c': (BuildContext context) => TmpScreen(),
+        '/a': (context) => LoginScreen(),
+        '/b': (context) => HomeScreen(),
+        '/c': (context) => Faculties(),
+
       },
     );
   }

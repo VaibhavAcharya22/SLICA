@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore:
   firebase_analytics:
   shared_preferences:
+  animated_dialog:
 
 dev_dependencies:
   flutter_test:

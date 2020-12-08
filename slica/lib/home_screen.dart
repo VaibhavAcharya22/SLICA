@@ -1,22 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slica/login.dart';
-
-
+import 'package:slica/utilities/bouncy_animation.dart';
+import 'utilities/dialog.dart';
+import 'utilities/constants.dart';
+import 'faculties.dart';
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   SharedPreferences logindata;
   String uname;
+  List<String> _rollNo ;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     initial();
   }
@@ -25,102 +25,106 @@ class _HomeScreenState extends State<HomeScreen> {
     logindata = await SharedPreferences.getInstance();
     setState(() {
       uname = logindata.getString('uname');
+      print(_rollNo = uname.split("@"));
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        showAlertDialog(context);
-        // Navigator.of(context).canPop();
+        showDoubleBtnAlertDialog(context, "Want to quit", "Are you sure you want to quit?", "Cancel", "Yes");
         return true;
       },
-      child: Scaffold(
-        body: Column(
-          children: [
-            Container(
-              child: Text("Welcome IN TYBCA."),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              " SLICA ",
+              style: kAppBarTextStyle,
             ),
-            _buildLoginBtn(),
-          ],
-        ),
-      ),
-    );
-  }
-  Widget _buildLoginBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () async {
-          logindata.setBool('login', true);
+            centerTitle: true,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text("Welcome IN TYBCA."),
+              ),
+            ],
+          ),
+          drawer: Drawer(
+            child: ListView(
+              children: <Widget>[
+                DrawerHeader(
+                  child: Column(
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundImage: AssetImage("assets/images/SLICA.jpeg"),
+                        radius: 50,
+                      ),
 
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-          try{
-            // Navigator.of(context).pop();
-            // Navigator.of(context).pushNamedAndRemoveUntil('/a', (Route<dynamic> route) => false);
-            // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-            // Navigator.of(context).popUntil(ModalRoute.withName('/a'));
-          }catch(e){
-            print(e);
-          }
-        },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'LOGOUT',
-          style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
+                      Text("Roll No : ${_rollNo[0]}"),
+                      SizedBox(height: 5,),
+                      Text("Name : Vaibhav Acharya"),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 15,),
+                ListTile(
+                  leading: Icon(Icons.person,color: Colors.blueAccent,),
+                  title: Text('Profile'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: Icon(Icons.group,color: Colors.blueAccent,),
+                  title: Text('Faculties'),
+                  onTap: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Faculties()));
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.note,color: Colors.blueAccent,),
+                  title: Text('Notes'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: Icon(Icons.supervised_user_circle,color: Colors.blueAccent,),
+                  title: Text('About Us'),
+                  onTap: () {},
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.logout,color: Colors.blueAccent,),
+                  title: Text('Logout'),
+                  onTap: () async {
+
+                    showDoubleBtnAlertDialogWithoutOnPressed(context,"Are you sure ?" , "Want to logout from SLICA","Cancel","Logout");
+
+                      //boolean variable login is change to true
+                      logindata.setBool('login', true);
+
+                      SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                      prefs.remove('uname');
+                      prefs.remove("login");
+
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  showAlertDialog(BuildContext context) {
-
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed:  () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Yes"),
-      onPressed:  () {
-        SystemNavigator.pop();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Want to quit"),
-      content: Text("Are you sure you want to quit?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-
 }

@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 
+// text field Controllers of login
+final emailController = TextEditingController();
+final passController = TextEditingController();
+final ScrollController scrollController = ScrollController();
+
+final kAppBarTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 24,
+  fontFamily: 'OpenSans',
+);
+
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
   // fontFamily: 'OpenSans',
