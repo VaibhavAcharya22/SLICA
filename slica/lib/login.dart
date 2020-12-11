@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slica/home_screen.dart';
 import 'utilities/constants.dart';
 import "package:shared_preferences/shared_preferences.dart";
 import 'utilities/dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -285,57 +285,63 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.9],
-                  ),
-                ),
-              ),
-              Container(
-                height: double.infinity,
-                child: ListView(
-                  // reverse: true,
-                  controller: scrollController,
-                  // physics: NeverScrollableScrollPhysics(),
-                  physics: RangeMaintainingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 100.0,
-                  ),
-                  children: <Widget>[
-                    Image(image: AssetImage("assets/images/SLICA.jpeg")),//logo of SLICA
-                    SizedBox(height: 30.0),
-                    _buildEmailTF(), // Calling Email Function
-                    SizedBox(
-                      height: 30.0,
+    return WillPopScope(
+      onWillPop: () async {
+        showDoubleBtnAlertDialog(context, "Want to quit", "Are you sure you want to quit?", "Cancel", "Yes");
+        return true;
+      },
+      child: Scaffold(
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFF73AEF5),
+                        Color(0xFF61A4F1),
+                        Color(0xFF478DE0),
+                        Color(0xFF398AE5),
+                      ],
+                      stops: [0.1, 0.4, 0.7, 0.9],
                     ),
-                    _buildPasswordTF(), // Calling Password Function
-                    _buildForgotPasswordBtn(), // Calling Forgot Password Function
-                    _buildShowPassCheckbox(), // Calling Show Password Function
-                    // _buildRememberMeCheckbox(),
-                    _buildLoginBtn(), // Calling Login Button Function
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  height: double.infinity,
+                  child: ListView(
+                    // reverse: true,
+                    controller: scrollController,
+                    // physics: NeverScrollableScrollPhysics(),
+                    physics: RangeMaintainingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40.0,
+                      vertical: 100.0,
+                    ),
+                    children: <Widget>[
+                      Image(image: AssetImage("assets/images/SLICA.jpeg")),//logo of SLICA
+                      SizedBox(height: 30.0),
+                      _buildEmailTF(), // Calling Email Function
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      _buildPasswordTF(), // Calling Password Function
+                      _buildForgotPasswordBtn(), // Calling Forgot Password Function
+                      _buildShowPassCheckbox(), // Calling Show Password Function
+                      // _buildRememberMeCheckbox(),
+                      _buildLoginBtn(), // Calling Login Button Function
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

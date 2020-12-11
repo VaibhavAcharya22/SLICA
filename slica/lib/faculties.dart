@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'utilities/bouncy_animation.dart';
 
 class Faculties extends StatefulWidget {
   @override
@@ -12,190 +13,196 @@ class _Faculties extends State<Faculties> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildBar(context),
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              child: new FittedBox(
-                child: Material(
-                    color: Colors.white,
-                    elevation: 14.0,
-                    borderRadius: BorderRadius.circular(24.0),
-                    shadowColor: Color(0x802196F3),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: myDetailsContainer1(),
-                          ),
-                        ),
-
-                        Container(
-                          width: 250,
-                          height: 200,
-                          child: ClipRRect(
-                            borderRadius: new BorderRadius.circular(24.0),
-                            child: Image(
-                              fit: BoxFit.contain,
-                              alignment: Alignment.topRight,
-                              image: AssetImage('assets/images/bca_ramesh-kataria.jpg'),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).push(BouncyAnimation(widget: HomeScreen()));
+       return true;
+      },
+      child: Scaffold(
+        appBar: _buildBar(context),
+        body: ListView(
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                child: new FittedBox(
+                  child: Material(
+                      color: Colors.white,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: myDetailsContainer1(),
                             ),
-                          ),),
-                      ],)
+                          ),
+
+                          Container(
+                            width: 250,
+                            height: 200,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.contain,
+                                alignment: Alignment.topRight,
+                                image: AssetImage('assets/images/bca_ramesh-kataria.jpg'),
+                              ),
+                            ),),
+                        ],)
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              child: new FittedBox(
-                child: Material(
-                    color: Colors.white,
-                    elevation: 14.0,
-                    borderRadius: BorderRadius.circular(24.0),
-                    shadowColor: Color(0x802196F3),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: myDetailsContainer2(),
-                          ),
-                        ),
-
-                        Container(
-                          width: 250,
-                          height: 180,
-                          child: ClipRRect(
-                            borderRadius: new BorderRadius.circular(24.0),
-                            child: Image(
-                              fit: BoxFit.contain,
-                              alignment: Alignment.topRight,
-                              image: AssetImage('assets/images/bca_kamesh_raval.jpg'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                child: new FittedBox(
+                  child: Material(
+                      color: Colors.white,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: myDetailsContainer2(),
                             ),
-                          ),),
-                      ],)
+                          ),
+
+                          Container(
+                            width: 250,
+                            height: 180,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.contain,
+                                alignment: Alignment.topRight,
+                                image: AssetImage('assets/images/bca_kamesh_raval.jpg'),
+                              ),
+                            ),),
+                        ],)
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              child: new FittedBox(
-                child: Material(
-                    color: Colors.white,
-                    elevation: 14.0,
-                    borderRadius: BorderRadius.circular(24.0),
-                    shadowColor: Color(0x802196F3),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: myDetailsContainer3(),
-                          ),
-                        ),
-
-                        Container(
-                          width: 250,
-                          height: 180,
-                          child: ClipRRect(
-                            borderRadius: new BorderRadius.circular(24.0),
-                            child: Image(
-                              fit: BoxFit.contain,
-                              alignment: Alignment.topRight,
-                              image: AssetImage('assets/images/bca_Amit-Bardhan.jpg'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                child: new FittedBox(
+                  child: Material(
+                      color: Colors.white,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: myDetailsContainer3(),
                             ),
-                          ),),
-                      ],)
+                          ),
+
+                          Container(
+                            width: 250,
+                            height: 180,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.contain,
+                                alignment: Alignment.topRight,
+                                image: AssetImage('assets/images/bca_Amit-Bardhan.jpg'),
+                              ),
+                            ),),
+                        ],)
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              child: new FittedBox(
-                child: Material(
-                    color: Colors.white,
-                    elevation: 14.0,
-                    borderRadius: BorderRadius.circular(24.0),
-                    shadowColor: Color(0x802196F3),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: myDetailsContainer4(),
-                          ),
-                        ),
-
-                        Container(
-                          width: 250,
-                          height: 180,
-                          child: ClipRRect(
-                            borderRadius: new BorderRadius.circular(24.0),
-                            child: Image(
-                              fit: BoxFit.contain,
-                              alignment: Alignment.topRight,
-                              image: AssetImage('assets/images/bca_Rachana-Parikh.jpg'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                child: new FittedBox(
+                  child: Material(
+                      color: Colors.white,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: myDetailsContainer4(),
                             ),
-                          ),),
-                      ],)
+                          ),
+
+                          Container(
+                            width: 250,
+                            height: 180,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.contain,
+                                alignment: Alignment.topRight,
+                                image: AssetImage('assets/images/bca_Rachana-Parikh.jpg'),
+                              ),
+                            ),),
+                        ],)
+                  ),
                 ),
               ),
             ),
-          ),
 
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              child: new FittedBox(
-                child: Material(
-                    color: Colors.white,
-                    elevation: 14.0,
-                    borderRadius: BorderRadius.circular(24.0),
-                    shadowColor: Color(0x802196F3),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: myDetailsContainer5(),
-                          ),
-                        ),
-
-                        Container(
-                          width: 250,
-                          height: 200,
-                          child: ClipRRect(
-                            borderRadius: new BorderRadius.circular(24.0),
-                            child: Image(
-                              fit: BoxFit.contain,
-                              alignment: Alignment.topRight,
-                              image: AssetImage('assets/images/bca_ramesh-kataria.jpg'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                child: new FittedBox(
+                  child: Material(
+                      color: Colors.white,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: myDetailsContainer5(),
                             ),
-                          ),),
-                      ],)
+                          ),
+
+                          Container(
+                            width: 250,
+                            height: 200,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.contain,
+                                alignment: Alignment.topRight,
+                                image: AssetImage('assets/images/bca_ramesh-kataria.jpg'),
+                              ),
+                            ),),
+                        ],)
+                  ),
                 ),
               ),
             ),
-          ),
 
 
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -332,8 +339,7 @@ class _Faculties extends State<Faculties> {
       leading: new IconButton(
         icon: _searchIcon,
         onPressed: (){
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => HomeScreen()));
+          Navigator.of(context).push(BouncyAnimation(widget: HomeScreen()));
         },
 
       ),

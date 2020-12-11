@@ -88,8 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: Icon(Icons.group,color: Colors.blueAccent,),
                   title: Text('Faculties'),
                   onTap: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => Faculties()));
+                    Navigator.of(context).push(BouncyAnimation(widget: Faculties()));
+//                    Navigator.pushReplacement(context,
+//                        MaterialPageRoute(builder: (context) => Faculties()));
                   },
                 ),
                 ListTile(

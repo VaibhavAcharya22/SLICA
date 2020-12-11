@@ -94,7 +94,8 @@ showDoubleBtnAlertDialogWithoutOnPressed(BuildContext context, String title , St
   Widget continueButton = FlatButton(
     child: Text(sbtn),
     onPressed:  () {
-      Navigator.popUntil(context, ModalRoute.withName('/a'));
+        Navigator.of(context).pushReplacementNamed("/a");
+//      Navigator.popUntil(context, ModalRoute.withName('/a'));
 //      Navigator.of(context).popUntil((route) => route.settings.name == "/a");
 //      Navigator.pushReplacement(context,
 //          MaterialPageRoute(builder: (context) => LoginScreen()));
